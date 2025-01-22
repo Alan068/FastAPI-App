@@ -1,0 +1,1 @@
+A FastAPI for managing tasks with features such as creating, updating, retrieving, and deleting tasks. Implements standard architecture with routers, schemas, and middleware, following industry-level practices.

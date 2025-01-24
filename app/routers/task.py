@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 #from app.schemas.user import Task
-from app.models.user_models import Task  # Using sqlalchemy models for db operations
+from app.models.task import Task  # Using sqlalchemy models for db operations
 from sqlalchemy.orm import Session
-from app.schemas.user import TaskSchema  # Use TaskSchema from schema/user.py for pydantic validations.
+from app.schemas.task import TaskSchema  # Use TaskSchema from schema/user.py for pydantic validations.
 from app.config import get_db
 
 from uuid import uuid4, UUID

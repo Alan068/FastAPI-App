@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from app.settings import Settings  # Importing Settings class for db URL
 
 import os
 from dotenv import load_dotenv
@@ -7,7 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()  # loads environment variables from .env file
 
 
-DATABASE_URL = "sqlite:///./tasks.db" # Tells sqlite where to find database
+settings = Settings()  # Initializing settings
+
+
+DATABASE_URL = settings.DATABASE_URL # Tells sqlite where to find database
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})   # Connects fastapi to the database, allows same conn to be used across diff threads.
 

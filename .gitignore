@@ -3,3 +3,6 @@ __pycache__/
 logs/
 .vscode/
 .env
+*.db
+*.sqlite
+tasks.sqbpro

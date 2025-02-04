@@ -3,6 +3,9 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from app.config import Base
 import enum
+from sqlalchemy.orm import DeclarativeBase
+from .base import Base  # Importing Base for db migrations
+
 
 class UserRole(enum.Enum):
     user = "user"

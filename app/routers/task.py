@@ -5,13 +5,17 @@ from uuid import uuid4, UUID
 from app.models.user import User
 from app.schemas.task import TaskSchema  # For Pydantic validations
 from app.dao.task import (
-    dao_create_task, get_all_tasks, get_task_by_id,
-    dao_update_task, dao_delete_task, dao_review_task
+    dao_create_task, get_all_tasks, get_task_by_id, dao_update_task,
+    dao_delete_task, dao_review_task, get_feedbacks_for_summary
 )
 
 from app.config import get_db
 from app.middlewares.response import response
 from app.middlewares.auth import get_current_user, manager_required
+from app.genai.utils import generate_summary
+from fastapi.responses import PlainTextResponse
+
+
 
 router = APIRouter()
 
@@ -77,3 +81,16 @@ def review_task(task_id: UUID, task_update: TaskSchema, db: Session = Depends(ge
     if not reviewed_task:
         raise HTTPException(status_code=404, detail="Task not found or unauthorized")
     return response(True, "Task reviewed successfully", reviewed_task)
+
+
+
+# Gets feedback summary of Tasks of an User (Only managers)
+@router.get("/tasks/{user_id}/summary", dependencies=[Depends(manager_required)])
+async def generate_task_summary(user_id: str, db: Session = Depends(get_db)):
+    feedbacks = get_feedbacks_for_summary(db, user_id)
+
+    if not feedbacks:
+        raise HTTPException(status_code=404, detail="No feedback found in the past month for this user.")
+
+    summary = generate_summary(feedbacks)
+    return PlainTextResponse(content=summary)

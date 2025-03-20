@@ -4,6 +4,8 @@ from uuid import UUID
 from app.schemas.task import TaskSchema
 from app.models.user import User
 from fastapi import HTTPException
+from datetime import datetime, timedelta
+
 
 
 def dao_create_task(db: Session, task_data: dict, current_user: User) -> Task:
@@ -84,3 +86,16 @@ def dao_review_task(db: Session, task_id: UUID, task_update: TaskSchema, current
     db.commit()
     db.refresh(task)
     return task
+
+
+
+def get_feedbacks_for_summary(db: Session, user_id: str) -> list[str]:
+    one_month_ago = datetime.today() - timedelta(days=30)
+
+    feedbacks = (
+        db.query(Task.feedback)
+        .filter(Task.assignee == user_id, Task.feedback.isnot(None), Task.feedback != "", Task.end_date >= one_month_ago)
+        .all()
+    )
+
+    return [feedback[0] for feedback in feedbacks]

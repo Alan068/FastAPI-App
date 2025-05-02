@@ -8,12 +8,14 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from uuid import uuid4
 from app.settings import settings
+from app.schemas.auth import LoginData
+
 
 
 # print(settings,"555555")
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
 router = APIRouter()
@@ -58,10 +60,11 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(username: str, password: str, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.username == username).first()
-    if not db_user or not verify_password(password, db_user.hashed_password):
+def login(login_data: LoginData, db: Session = Depends(get_db)):    # username: str, password: str
+    db_user = db.query(User).filter(User.username == login_data.username).first()
+    if not db_user or not verify_password(login_data.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    access_token = create_access_token(data={"sub": str(db_user.user_id)})
+    access_token = create_access_token(data={"sub": str(db_user.user_id), "role": db_user.role.value})
+
     return {"access_token": access_token, "token_type": "bearer"}

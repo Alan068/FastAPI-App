@@ -26,3 +26,7 @@ class Token(BaseModel):   # Represents the JWT token returned after successful l
 
 class TokenData(BaseModel):   # Decoded data. Used internally to validate and extract data from JWT tokens during authentication.
     username: Optional[str] = None   # Optional as token might now contain valid user info.
+    
+class LoginData(BaseModel):
+    username: str
+    password: str

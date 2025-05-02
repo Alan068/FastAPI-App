@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routers import task, user, auth
-from app.config import engine, Base
+from app.config import engine
+from app.models.base import Base
 
 app = FastAPI()
 

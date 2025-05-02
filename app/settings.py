@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     SECRET_KEY: str = os.getenv("SECRET_KEY")
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY")
 
     class Config:
         env_file = ".env"  # The .env file to load from

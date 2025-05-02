@@ -14,7 +14,7 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}) 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)   # This session is used to interact with db, with autocommit=false, changes not automlly saved to db. We've to manually commit.
 
-Base = declarative_base()   # Foundation for all db models. Helps sqlalechemy manage the models and map em to db tables.
+# Base = declarative_base()   # Foundation for all db models. Helps sqlalechemy manage the models and map em to db tables. Using Base of models.
 
 # To get db session
 def get_db():

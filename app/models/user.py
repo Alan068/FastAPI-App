@@ -1,10 +1,8 @@
 from sqlalchemy import Column, String, Enum
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from app.config import Base
+from app.models.base import Base  # Importing Base for db migrations
 import enum
-from sqlalchemy.orm import DeclarativeBase
-from .base import Base  # Importing Base for db migrations
 
 
 class UserRole(enum.Enum):
@@ -15,7 +13,7 @@ class UserRole(enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    user_id = Column(UUID, primary_key=True, default=uuid.uuid4, unique=True, index=True, nullable=False)
+    user_id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True, index=True, nullable=False)
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(50), unique=True, index=True, nullable=False)
     hashed_password = Column(String(128), nullable=False)
